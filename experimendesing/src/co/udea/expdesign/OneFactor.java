@@ -22,6 +22,8 @@ public class OneFactor {
 	private double[] traetmentsSum;
 	private HashMap<Integer, Double> anovaHash;
 	
+	private int digitNumber=2;
+	
 	public OneFactor(double[][] dataMatrix, String[] traetmentsNames) {
 		super();
 		this.dataMatrix = dataMatrix;
@@ -87,12 +89,12 @@ public class OneFactor {
 		
 		double f0 = mstratos/mserror;
 		
-		anovaHash.put(SStotals, Repository.round(sstotals, 2));
-		anovaHash.put(SStrattos,Repository.round( sstratos, 2));
-		anovaHash.put(SSerror, Repository.round(sserror, 2));
-		anovaHash.put(MStrattos,Repository.round( mstratos, 2));
-		anovaHash.put(MSerror, Repository.round(mserror, 2));
-		anovaHash.put(F0, Repository.round(f0, 2));
+		anovaHash.put(SStotals, Repository.round(sstotals, digitNumber));
+		anovaHash.put(SStrattos,Repository.round( sstratos, digitNumber));
+		anovaHash.put(SSerror, Repository.round(sserror, digitNumber));
+		anovaHash.put(MStrattos,Repository.round( mstratos, digitNumber));
+		anovaHash.put(MSerror, Repository.round(mserror, digitNumber));
+		anovaHash.put(F0, Repository.round(f0, digitNumber));
 		
 	}
 	
@@ -138,7 +140,12 @@ public class OneFactor {
 	}
 	
 	
+	public void setAnovaItem(int key, double value){
+		anovaHash.put(key, value);
+	}
 	
-	
+	public double  getAnovaItem(int key){
+		return anovaHash.get(key);
+	}
 	
 }

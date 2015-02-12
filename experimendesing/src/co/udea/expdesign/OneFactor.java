@@ -2,6 +2,7 @@ package co.udea.expdesign;
 
 import java.util.HashMap;
 
+import co.udea.expdesign.entity.ItemMeanComparison;
 import co.udea.extras.Repository;
 
 public class OneFactor {
@@ -98,6 +99,33 @@ public class OneFactor {
 		
 	}
 	
+	public ItemMeanComparison[] compareMedias(){
+		
+		int numberTreatments = traetmentMeans.length;
+		int lengthComparison  = 0;
+		ItemMeanComparison[] totalComparisons;
+		int index = 0;
+		
+		for (int i = 0; i < numberTreatments; i++) {
+			lengthComparison = numberTreatments - i;
+		}
+		
+		totalComparisons = new ItemMeanComparison[lengthComparison];
+		
+		for (int i = 0; i < numberTreatments; i++) {
+			
+			int j = 0;
+			for (j =i+1; j < numberTreatments; j++) {
+				
+			
+			totalComparisons[index] = new ItemMeanComparison(i, j, Math.abs(traetmentMeans[i]-traetmentMeans[j]));
+			index++;
+			}
+			
+		}
+		
+		return totalComparisons;
+	}
 	
 	public double[][] getDataMatrix() {
 		return dataMatrix;

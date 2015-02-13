@@ -215,12 +215,12 @@ public class Repository {
 	      return Math.rint(number*quantity)/quantity;
 	}
 		
-	public static double getStudentF0(String confindence, String  freedomGrade){
+	public static double getStudentF0(String confindenceInterval, String  freedomGrade){
 		int lengthConfidence =  confidenceStudent.length;
 		int lengthFreedomG = freedomGradesStundent.length;
 		int i = 0;
 		for (i = 0; i < lengthConfidence; i++) {
-			if(confidenceStudent[i].equals(confindence)){
+			if(confidenceStudent[i].equals(confindenceInterval)){
 				break;
 			}
 		}
@@ -236,6 +236,35 @@ public class Repository {
 		}else{
 			return 0.0;
 		}
+	}
+	
+	
+	public static double getFisherF0(String confindenceInterval, String numerator, String denominator){
+		
+		
+		
+		int lengthFisher =  indexesFisher.length;
+		int i = 0;
+		for (i = 0; i < lengthFisher; i++) {
+			if(confidenceStudent[i].equals(numerator)){
+				break;
+			}
+		}
+		int j = 0;
+		for (j = 0; j < lengthFisher; j++) {
+			if(freedomGradesStundent[j].equals(denominator)){
+				break;
+			}
+		}
+		
+		if((i!=lengthFisher)&&(j!=lengthFisher)){
+			switch (confindenceInterval) {
+			case "0.9": return tableFisher090[j][i];
+			case "0.95": return tableFisher095[j][i];
+			}
+		
+		}
+		return 0.0;
 	}
 	
 }

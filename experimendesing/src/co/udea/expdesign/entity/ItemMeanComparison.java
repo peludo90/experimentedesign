@@ -4,6 +4,7 @@ public class ItemMeanComparison {
 	int firstTreatment;
 	int secondTreatment;
 	double differenceAbs;
+	boolean valid;
 	
 	public ItemMeanComparison(int firstTreatment, int secondTreatment,
 			double differenceAbs) {
@@ -12,6 +13,19 @@ public class ItemMeanComparison {
 		this.secondTreatment = secondTreatment;
 		this.differenceAbs = differenceAbs;
 	}
+	
+	
+
+	public ItemMeanComparison(int firstTreatment, int secondTreatment,
+			double differenceAbs, boolean valid) {
+		super();
+		this.firstTreatment = firstTreatment;
+		this.secondTreatment = secondTreatment;
+		this.differenceAbs = differenceAbs;
+		this.valid = valid;
+	}
+
+
 
 	public int getFirstTreatment() {
 		return firstTreatment;
@@ -35,6 +49,14 @@ public class ItemMeanComparison {
 
 	public void setDifferenceAbs(double differenceAbs) {
 		this.differenceAbs = differenceAbs;
+	} 
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 	
 	

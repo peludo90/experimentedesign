@@ -2,6 +2,7 @@ package co.udea.expdesign;
 
 import java.util.HashMap;
 
+import co.udea.expdesign.entity.ItemMeanComparison;
 import co.udea.extras.Repository;
 
 public class RandomizedBlocks {
@@ -18,6 +19,7 @@ public class RandomizedBlocks {
 	public  static final int MSblocks = 9;
 	public  static final int MSerror = 10;
 	public  static final int F0 = 11;
+	public static final int valueP = 12;
 	
 	private double[][] dataMatrix;
 	private String[] traetmentsNames;
@@ -29,6 +31,12 @@ public class RandomizedBlocks {
 	private HashMap<Integer, Double> anovaHash;
 	
 	private int digitNumber=2;
+	
+	
+	ItemMeanComparison[] totalComparisons;
+	private double lsdValue;
+	private boolean validHypothesis;
+
 	
 	public RandomizedBlocks(double[][] dataMatrix) {
 		super();
@@ -206,5 +214,68 @@ public class RandomizedBlocks {
 	}
 	
 	
+	
+	
+	public boolean isValidHypothesis() {
+		return validHypothesis;
+	}
+
+	private void validateHypothesis(String confidenceInterval) {
+		anovaHash.put(
+				valueP,
+				Repository.getStudentF0(confidenceInterval,
+						Integer.toString(anovaHash.get(GLerror).intValue())));
+
+		if (anovaHash.get(F0).doubleValue() < anovaHash.get(valueP)
+				.doubleValue()) {
+			validHypothesis = true;
+		} else {
+			validHypothesis = false;
+		}
+	}
+
+	public ItemMeanComparison[] getMeansDifferences() {
+
+		int numberTreatments = traetmentMeans.length;
+		int lengthComparison = 0;
+		int index = 0;
+
+		for (int i = 0; i < numberTreatments; i++) {
+			lengthComparison = numberTreatments - i;
+		}
+
+		totalComparisons = new ItemMeanComparison[lengthComparison];
+
+		for (int i = 0; i < numberTreatments; i++) {
+
+			int j = 0;
+			for (j = i + 1; j < numberTreatments; j++) {
+				totalComparisons[index] = new ItemMeanComparison(i, j,
+						Math.abs(traetmentMeans[i] - traetmentMeans[j]));
+				index++;
+			}
+		}
+		return totalComparisons;
+	}
+
+	private void setLsdValue(String confidenceInterval) {
+		double valueT = Repository.getFisherF0(confidenceInterval,
+				Integer.toString(anovaHash.get(GLtrattos).intValue()),
+				Integer.toString(anovaHash.get(GLerror).intValue()));
+
+		lsdValue = valueT
+				* Math.sqrt((2 * anovaHash.get(MSerror) / dataMatrix.length));
+	}
+
+	private void evalueMeanDifferences() {
+		int length = totalComparisons.length;
+		for (int i = 0; i < length; i++) {
+			if (totalComparisons[i].getDifferenceAbs() < lsdValue) {
+				totalComparisons[i].setValid(true);
+			} else {
+				totalComparisons[i].setValid(false);
+			}
+		}
+	}
 	
 }

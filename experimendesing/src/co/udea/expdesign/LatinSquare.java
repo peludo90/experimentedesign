@@ -3,6 +3,7 @@ package co.udea.expdesign;
 import java.util.HashMap;
 
 import co.udea.expdesign.entity.ItemLatinSquare;
+import co.udea.expdesign.entity.ItemMeanComparison;
 import co.udea.extras.Repository;
 
 public class LatinSquare {
@@ -22,6 +23,7 @@ public class LatinSquare {
 	public  static final int MScolumns = 12;
 	public  static final int MSerror = 13;
 	public  static final int F0 = 14;
+	public static final int valueP = 15;
 	
 	private ItemLatinSquare[][] dataMatrix;
 	private String[] columnNames;
@@ -31,11 +33,17 @@ public class LatinSquare {
 	private double[] rowsSum;
 	private double[] columnMeans;
 	private double[] columnSum;
-	private double[] trattoMeans;
+	private double[] traetmentMeans;
 	private double[] trattoSum;
 	private HashMap<Integer, Double> anovaHash;
 	
 	private int digitNumber=2;
+	
+	ItemMeanComparison[] totalComparisons;
+	private double lsdValue;
+	private boolean validHypothesis;
+
+	
 	
 	public LatinSquare(ItemLatinSquare[][] dataMatrix) {
 		super();
@@ -69,7 +77,7 @@ public class LatinSquare {
 		columnSum = new double[dataMatrix[0].length];
 		
 		lettersLSQ = new char[dataMatrix.length];
-		trattoMeans = new double[dataMatrix.length];
+		traetmentMeans = new double[dataMatrix.length];
 		trattoSum = new double[dataMatrix.length];
 
 		//asignar el valor de los grados libres
@@ -242,11 +250,11 @@ public class LatinSquare {
 	}
 
 	public double[] getTrattoMeans() {
-		return trattoMeans;
+		return traetmentMeans;
 	}
 
 	public void setTrattoMeans(double[] trattoMeans) {
-		this.trattoMeans = trattoMeans;
+		this.traetmentMeans = trattoMeans;
 	}
 
 	public double[] getTrattoSum() {
@@ -274,6 +282,67 @@ public class LatinSquare {
 	}
 	
 	
+	public boolean isValidHypothesis() {
+		return validHypothesis;
+	}
+
+	private void validateHypothesis(String confidenceInterval) {
+		anovaHash.put(
+				valueP,
+				Repository.getStudentF0(confidenceInterval,
+						Integer.toString(anovaHash.get(GLerror).intValue())));
+
+		if (anovaHash.get(F0).doubleValue() < anovaHash.get(valueP)
+				.doubleValue()) {
+			validHypothesis = true;
+		} else {
+			validHypothesis = false;
+		}
+	}
+
+	public ItemMeanComparison[] getMeansDifferences() {
+
+		int numberTreatments = traetmentMeans.length;
+		int lengthComparison = 0;
+		int index = 0;
+
+		for (int i = 0; i < numberTreatments; i++) {
+			lengthComparison = numberTreatments - i;
+		}
+
+		totalComparisons = new ItemMeanComparison[lengthComparison];
+
+		for (int i = 0; i < numberTreatments; i++) {
+
+			int j = 0;
+			for (j = i + 1; j < numberTreatments; j++) {
+				totalComparisons[index] = new ItemMeanComparison(i, j,
+						Math.abs(traetmentMeans[i] - traetmentMeans[j]));
+				index++;
+			}
+		}
+		return totalComparisons;
+	}
+
+	private void setLsdValue(String confidenceInterval) {
+		double valueT = Repository.getFisherF0(confidenceInterval,
+				Integer.toString(anovaHash.get(GLtrattos).intValue()),
+				Integer.toString(anovaHash.get(GLerror).intValue()));
+
+		lsdValue = valueT
+				* Math.sqrt((2 * anovaHash.get(MSerror) / dataMatrix.length));
+	}
+
+	private void evalueMeanDifferences() {
+		int length = totalComparisons.length;
+		for (int i = 0; i < length; i++) {
+			if (totalComparisons[i].getDifferenceAbs() < lsdValue) {
+				totalComparisons[i].setValid(true);
+			} else {
+				totalComparisons[i].setValid(false);
+			}
+		}
+	}
 	
 	
 }

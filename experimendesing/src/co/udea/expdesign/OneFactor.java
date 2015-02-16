@@ -165,10 +165,9 @@ public class OneFactor {
 	}
 
 	private void validateHypothesis(String confidenceInterval) {
-		anovaHash.put(
-				valueP,
-				Repository.getStudentF0(confidenceInterval,
-						Integer.toString(anovaHash.get(GLerror).intValue())));
+		anovaHash.put(valueP, Repository.getFisherF0(confidenceInterval,
+				Integer.toString(anovaHash.get(GLtrattos).intValue()),
+				Integer.toString(anovaHash.get(GLerror).intValue())));
 
 		if (anovaHash.get(F0).doubleValue() < anovaHash.get(valueP)
 				.doubleValue()) {
@@ -203,12 +202,12 @@ public class OneFactor {
 	}
 
 	private void setLsdValue(String confidenceInterval) {
-		double valueT = Repository.getFisherF0(confidenceInterval,
-				Integer.toString(anovaHash.get(GLtrattos).intValue()),
-				Integer.toString(anovaHash.get(GLerror).intValue()));
+		double valueT = Repository.getStudentF0(confidenceInterval,
+						Integer.toString(anovaHash.get(GLerror).intValue()));
+
 
 		lsdValue = valueT
-				* Math.sqrt((2 * anovaHash.get(MSerror) / dataMatrix.length));
+				* Math.sqrt((2 * anovaHash.get(MSerror).doubleValue() / dataMatrix.length));
 	}
 
 	private void evalueMeanDifferences() {

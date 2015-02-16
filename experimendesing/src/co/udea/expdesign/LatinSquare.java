@@ -62,6 +62,17 @@ public class LatinSquare {
 		anovaHash = new HashMap<Integer, Double>();
 		useData();
 	}
+	
+	public LatinSquare(ItemLatinSquare[][] dataMatrix, String confidenceInterval) {
+		super();
+		this.dataMatrix = dataMatrix;		
+		anovaHash = new HashMap<Integer, Double>();
+		useData();
+		validateHypothesis(confidenceInterval);
+		getMeansDifferences();
+		setLsdValue(confidenceInterval);
+		evalueMeanDifferences();
+	}
 
 	private void useData(){
 		double a = dataMatrix.length;
@@ -128,9 +139,6 @@ public class LatinSquare {
 					
 		}
 		
-		int numberItemsNegative = (int) -a;
-		int cell = (int) a;
-		
 		for (int i = 0; i < a; i++) {
 			int temp = 65+i;
 			lettersLSQ[i] = (char) temp;
@@ -167,10 +175,10 @@ public class LatinSquare {
 		double msrows = ssrows/(b-1);
 		double mscolumns = sscolumns/(a-1);
 		double mstrattos = sstrattos/(a-1);
-		double mserror = sserror/((a-1)*(b-1));
+		double mserror = sserror/((a-2)*(b-1));
 		
 		
-		double f0 = msrows/mserror;
+		double f0 = mstrattos/mserror;
 		
 		anovaHash.put(SStrattos,Repository.round( sstrattos, digitNumber));
 		anovaHash.put(SSrows,Repository.round( ssrows, digitNumber));
@@ -281,17 +289,25 @@ public class LatinSquare {
 		this.digitNumber = digitNumber;
 	}
 	
+	public void setAnovaItem(int key, double value) {
+		anovaHash.put(key, value);
+	}
+
+	public double getAnovaItem(int key) {
+		return anovaHash.get(key);
+	}
+	
 	
 	public boolean isValidHypothesis() {
 		return validHypothesis;
 	}
 
 	private void validateHypothesis(String confidenceInterval) {
-		anovaHash.put(
-				valueP,
-				Repository.getStudentF0(confidenceInterval,
-						Integer.toString(anovaHash.get(GLerror).intValue())));
-
+		Repository.getFisherF0(confidenceInterval,
+				Integer.toString(anovaHash.get(GLtrattos).intValue()),
+				Integer.toString(anovaHash.get(GLerror).intValue()));
+		
+		
 		if (anovaHash.get(F0).doubleValue() < anovaHash.get(valueP)
 				.doubleValue()) {
 			validHypothesis = true;
@@ -325,12 +341,11 @@ public class LatinSquare {
 	}
 
 	private void setLsdValue(String confidenceInterval) {
-		double valueT = Repository.getFisherF0(confidenceInterval,
-				Integer.toString(anovaHash.get(GLtrattos).intValue()),
+		double valueT = Repository.getStudentF0(confidenceInterval,
 				Integer.toString(anovaHash.get(GLerror).intValue()));
 
 		lsdValue = valueT
-				* Math.sqrt((2 * anovaHash.get(MSerror) / dataMatrix.length));
+				* Math.sqrt((2 * anovaHash.get(MSerror).doubleValue() / dataMatrix.length));
 	}
 
 	private void evalueMeanDifferences() {

@@ -1,7 +1,13 @@
 package co.udea.expdesign.entity;
 
-public class ItemLatinSquare {
+import java.io.Serializable;
 
+public class ItemLatinSquare implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private char Letter;
 	private double value;
 	

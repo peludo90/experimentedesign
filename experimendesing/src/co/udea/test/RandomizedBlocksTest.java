@@ -17,7 +17,7 @@ public class RandomizedBlocksTest {
 			 {2,1,5,7}
 			};
 	
-	RandomizedBlocks block = new RandomizedBlocks(matrix);
+	RandomizedBlocks block = new RandomizedBlocks(matrix, "95");
 	
 	@Test
 	public void sumTrattos(){

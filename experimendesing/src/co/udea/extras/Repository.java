@@ -107,7 +107,7 @@ public class Repository {
 		{ 0.6770 , 1.2901 , 1.6602 , 1.9840 , 2.3642 , 2.6259 },
 		{ 0.6745 , 1.2816 , 1.6449 , 1.9600 , 2.3263 , 2.5758 }};
 	
-	public final static String[] confidenceStudent = { "0.25" , "0.1" , "0.05" , "0.025" ,"0.01" , "0.005" };
+	public final static String[] confidenceStudent = { "75" , "90" , "95" , "97.5" ,"99" , "99.5" };
 	public final static String[] freedomGradesStundent = {"1", "2", "3", "4", "5", "6", "7", "8", "9", 
 		"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", 
 		"25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", 
@@ -209,6 +209,9 @@ public class Repository {
 	
 	public final static String[] indexesFisher = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "40", "50", "60", "70", "80", "90", "100", "200", "500", "1000"}; 
 	
+	public final static String[] confidendeFisher = {"90","95"};
+	
+	
 	public static double round(double number,int digits)
 	{
 	      int quantity=(int) Math.pow(10,digits);
@@ -246,7 +249,8 @@ public class Repository {
 		int lengthFisher =  indexesFisher.length;
 		int i = 0;
 		for (i = 0; i < lengthFisher; i++) {
-			if(confidenceStudent[i].equals(numerator)){
+			System.out.println(indexesFisher[i]+ " " + numerator);
+			if(indexesFisher[i].equals(numerator)){
 				break;
 			}
 		}
@@ -259,8 +263,8 @@ public class Repository {
 		
 		if((i!=lengthFisher)&&(j!=lengthFisher)){
 			switch (confindenceInterval) {
-			case "0.9": return tableFisher090[j][i];
-			case "0.95": return tableFisher095[j][i];
+			case "90": return tableFisher090[j][i];
+			case "95": return tableFisher095[j][i];
 			}
 		
 		}

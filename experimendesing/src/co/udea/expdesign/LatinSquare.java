@@ -39,7 +39,7 @@ public class LatinSquare {
 	
 	private int digitNumber=2;
 	
-	ItemMeanComparison[] totalComparisons;
+	private ItemMeanComparison[] totalComparisons;
 	private double lsdValue;
 	private boolean validHypothesis;
 
@@ -160,6 +160,7 @@ public class LatinSquare {
 		double sumTrattosPow = 0.0;
 		
 		for (int i = 0; i < trattoSum.length; i++) {
+			traetmentMeans[i] = trattoSum[i]/a;
 			sumTrattosPow += Math.pow(trattoSum[i], 2);
 		}
 		
@@ -302,11 +303,19 @@ public class LatinSquare {
 		return validHypothesis;
 	}
 
+	public double getLsdValue() {
+		return lsdValue;
+	}
+
+	public void setLsdValue(double lsdValue) {
+		this.lsdValue = lsdValue;
+	}
+
 	private void validateHypothesis(String confidenceInterval) {
-		Repository.getFisherF0(confidenceInterval,
+		anovaHash.put(valueP,Repository.getFisherF0(confidenceInterval,
 				Integer.toString(anovaHash.get(GLtrattos).intValue()),
-				Integer.toString(anovaHash.get(GLerror).intValue()));
-		
+				Integer.toString(anovaHash.get(GLerror).intValue())));
+
 		
 		if (anovaHash.get(F0).doubleValue() < anovaHash.get(valueP)
 				.doubleValue()) {
@@ -322,21 +331,22 @@ public class LatinSquare {
 		int lengthComparison = 0;
 		int index = 0;
 
-		for (int i = 0; i < numberTreatments; i++) {
-			lengthComparison = numberTreatments - i;
+		for (int i = 1; i < numberTreatments; i++) {
+			lengthComparison += numberTreatments - i;
 		}
-
 		totalComparisons = new ItemMeanComparison[lengthComparison];
-
+		System.out.println(numberTreatments);
 		for (int i = 0; i < numberTreatments; i++) {
 
 			int j = 0;
 			for (j = i + 1; j < numberTreatments; j++) {
-				totalComparisons[index] = new ItemMeanComparison(i, j,
+				totalComparisons[index]  =  new ItemMeanComparison(i, j,
 						Math.abs(traetmentMeans[i] - traetmentMeans[j]));
+				
 				index++;
 			}
 		}
+
 		return totalComparisons;
 	}
 

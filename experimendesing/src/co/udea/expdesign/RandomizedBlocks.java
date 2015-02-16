@@ -32,7 +32,7 @@ public class RandomizedBlocks {
 
 	private int digitNumber = 2;
 
-	ItemMeanComparison[] totalComparisons;
+	private ItemMeanComparison[] totalComparisons;
 	private double lsdValue;
 	private boolean validHypothesis;
 
@@ -232,6 +232,15 @@ public class RandomizedBlocks {
 	public boolean isValidHypothesis() {
 		return validHypothesis;
 	}
+	
+	public double getLsdValue() {
+		return lsdValue;
+	}
+
+	public void setLsdValue(double lsdValue) {
+		this.lsdValue = lsdValue;
+	}
+
 
 	private void validateHypothesis(String confidenceInterval) {
 		anovaHash.put(valueP, Repository.getFisherF0(confidenceInterval,
@@ -252,12 +261,11 @@ public class RandomizedBlocks {
 		int lengthComparison = 0;
 		int index = 0;
 
-		for (int i = 0; i < numberTreatments; i++) {
-			lengthComparison = numberTreatments - i;
+		for (int i = 1; i < numberTreatments; i++) {
+			lengthComparison += numberTreatments - i;
 		}
-
 		totalComparisons = new ItemMeanComparison[lengthComparison];
-
+		System.out.println(numberTreatments);
 		for (int i = 0; i < numberTreatments; i++) {
 
 			int j = 0;
@@ -281,10 +289,10 @@ public class RandomizedBlocks {
 	private void evalueMeanDifferences() {
 		int length = totalComparisons.length;
 		for (int i = 0; i < length; i++) {
-			if (totalComparisons[i].getDifferenceAbs() < lsdValue) {
-				totalComparisons[i].setValid(true);
-			} else {
+			if (totalComparisons[i].getDifferenceAbs() > lsdValue) {
 				totalComparisons[i].setValid(false);
+			} else {
+				totalComparisons[i].setValid(true);
 			}
 		}
 	}

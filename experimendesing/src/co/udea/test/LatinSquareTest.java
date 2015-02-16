@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import co.udea.expdesign.LatinSquare;
 import co.udea.expdesign.entity.ItemLatinSquare;
+import co.udea.expdesign.entity.ItemMeanComparison;
 
 public class LatinSquareTest {
 	
@@ -42,15 +43,28 @@ public class LatinSquareTest {
 	@Test
 	public void anova() {
 		
-		LatinSquare latin = new LatinSquare(matrix);
+		LatinSquare latin = new LatinSquare(matrix,"95");
 		
 		double[] anovaexpect = {330,68,150,128,676,4,4,4,12,24,82.50,17,37.50,10.67,7.73};
 		
 		HashMap<Integer, Double> testAnova = latin.getAnovaHash();
  		for (int i = 0; i < anovaexpect.length; i++) {
- 			System.out.println(i);
 			assertEquals(anovaexpect[i], testAnova.get(i),0);
 		}
+ 		
+ 		ItemMeanComparison[] totalComparisons = latin.getMeansDifferences();
+ 		String label = "";
+ 		for (int i = 0; i < totalComparisons.length; i++) {
+			 label += "| Treament" + (totalComparisons[i].getFirstTreatment()+1) + " - Treatment" + 
+		(totalComparisons[i].getSecondTreatment()+1) + " | = " + totalComparisons[i].getDifferenceAbs();
+			if(totalComparisons[i].isValid()){
+				label += " *";
+			}
+			
+			label+="\n";
+		}
+ 		
+ 		System.out.println(label);
 	}
 
 }

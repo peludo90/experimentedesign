@@ -1,10 +1,10 @@
 package co.udea.expdesign.entity;
 
 public class ItemMeanComparison {
-	int firstTreatment;
-	int secondTreatment;
-	double differenceAbs;
-	boolean valid;
+	private int firstTreatment;
+	private int secondTreatment;
+	private double differenceAbs;
+	public boolean valid;
 	
 	public ItemMeanComparison(int firstTreatment, int secondTreatment,
 			double differenceAbs) {
@@ -12,6 +12,7 @@ public class ItemMeanComparison {
 		this.firstTreatment = firstTreatment;
 		this.secondTreatment = secondTreatment;
 		this.differenceAbs = differenceAbs;
+
 	}
 	
 	

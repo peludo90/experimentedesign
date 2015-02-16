@@ -23,7 +23,7 @@ public class OneFactor {
 	private double[] traetmentsSum;
 	private HashMap<Integer, Double> anovaHash;
 
-	ItemMeanComparison[] totalComparisons;
+	private ItemMeanComparison[] totalComparisons;
 	private double lsdValue;
 	private boolean validHypothesis;
 
@@ -163,6 +163,16 @@ public class OneFactor {
 	public boolean isValidHypothesis() {
 		return validHypothesis;
 	}
+	
+
+	public double getLsdValue() {
+		return lsdValue;
+	}
+
+	public void setLsdValue(double lsdValue) {
+		this.lsdValue = lsdValue;
+	}
+
 
 	private void validateHypothesis(String confidenceInterval) {
 		anovaHash.put(valueP, Repository.getFisherF0(confidenceInterval,
@@ -183,12 +193,11 @@ public class OneFactor {
 		int lengthComparison = 0;
 		int index = 0;
 
-		for (int i = 0; i < numberTreatments; i++) {
-			lengthComparison = numberTreatments - i;
+		for (int i = 1; i < numberTreatments; i++) {
+			lengthComparison += numberTreatments - i;
 		}
-
 		totalComparisons = new ItemMeanComparison[lengthComparison];
-
+		System.out.println(numberTreatments);
 		for (int i = 0; i < numberTreatments; i++) {
 
 			int j = 0;
